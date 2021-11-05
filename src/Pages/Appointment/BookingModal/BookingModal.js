@@ -48,14 +48,14 @@ const BookingModal = ({ open, handleClose, booking, date, time }) => {
                             {name}
                         </Typography>
                         <form onSubmit={handleSubmit}>
-                            <TextField defaultValue={time} fullWidth disabled id="fullWidth" sx={{ my: 1 }} />
-                            <TextField placeholder='Your Name' fullWidth id="fullWidth" sx={{ my: 1 }} />
-                            <TextField placeholder='Your Email' fullWidth id="fullWidth" sx={{ my: 1 }} />
-                            <TextField placeholder='Your Number' fullWidth id="fullWidth" sx={{ my: 1 }} />
+                            <TextField type="time" defaultValue={time} fullWidth disabled id="fullWidth" sx={{ my: 1 }} />
+                            <TextField type="text" placeholder='Your Name' fullWidth id="fullWidth" sx={{ my: 1 }} />
+                            <TextField type="email" placeholder='Your Email' fullWidth id="fullWidth" sx={{ my: 1 }} />
+                            <TextField type="number" placeholder='Your Number' fullWidth id="fullWidth" sx={{ my: 1 }} />
                             <TextField defaultValue={date.toDateString()} fullWidth disabled id="fullWidth" sx={{ my: 1 }} />
 
                             <Button type="submit" variant="contained" color="success">
-                                Success
+                                Submit
                             </Button>
 
                         </form>
