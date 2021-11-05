@@ -4,39 +4,41 @@ import {
   Route
 } from "react-router-dom";
 import './App.css';
+import AuthProvider from "./context/AuthProvider";
 import Appointment from "./Pages/Appointment/Appointment/Appointment";
 import Home from "./Pages/Home/Home/Home";
 import Login from "./Pages/Login/Login/Login";
+import PrivateRoute from "./Pages/Login/PrivateRoute/PrivateRoute";
 import Register from "./Pages/Login/Register/Register";
 import NotFound from "./Pages/NotFound/NotFound";
 
 function App() {
   return (
     <div className="App">
-      <Router>
-
-        <Switch>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route exact path="/home">
-            <Home />
-          </Route>
-          <Route exact path="/appointment">
-            <Appointment></Appointment>
-          </Route>
-          <Route exact path="/login">
-            <Login></Login>
-          </Route>
-          <Route exact path="/register">
-            <Register></Register>
-          </Route>
-          <Route exact path="*">
-            <NotFound></NotFound>
-          </Route>
-        </Switch>
-
-      </Router>
+      <AuthProvider>
+        <Router>
+          <Switch>
+            <Route exact path="/">
+              <Home />
+            </Route>
+            <Route exact path="/home">
+              <Home />
+            </Route>
+            <PrivateRoute exact path="/appointment">
+              <Appointment></Appointment>
+            </PrivateRoute>
+            <Route exact path="/login">
+              <Login></Login>
+            </Route>
+            <Route exact path="/register">
+              <Register></Register>
+            </Route>
+            <Route exact path="*">
+              <NotFound></NotFound>
+            </Route>
+          </Switch>
+        </Router>
+      </AuthProvider>
     </div>
   );
 }

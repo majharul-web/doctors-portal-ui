@@ -1,6 +1,7 @@
-import { Button, Container, Grid, TextField, Typography } from '@mui/material';
+import { Alert, Button, CircularProgress, Container, Grid, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory, useLocation } from 'react-router-dom';
+import useAuth from '../../../hooks/useAuth';
 import LogImg from '../../../images/login.png'
 
 
@@ -8,6 +9,10 @@ import LogImg from '../../../images/login.png'
 const Login = () => {
 
     const [loginData, setLoginData] = useState({});
+    const { user, loginWithEmailPass, isLoading, authError } = useAuth();
+
+    const location = useLocation();
+    const history = useHistory();
 
 
     const handleOnChange = e => {
@@ -19,7 +24,7 @@ const Login = () => {
     }
 
     const handleLoginSubmit = e => {
-        alert('submit login')
+        loginWithEmailPass(loginData.email, loginData.password, location, history)
         e.preventDefault();
     }
     return (
@@ -35,7 +40,6 @@ const Login = () => {
                             type="email"
                             name="email"
                             onChange={handleOnChange}
-                            id="standard-basic"
                             label="Email"
                             variant="standard"
                             sx={{ my: 1, width: '75%' }}
@@ -45,7 +49,6 @@ const Login = () => {
                             type="password"
                             name="password"
                             onChange={handleOnChange}
-                            id="standard-basic"
                             label="Password"
                             variant="standard"
                             sx={{ my: 1, width: '75%' }}
@@ -58,6 +61,18 @@ const Login = () => {
                             Login
                         </Button>
                     </form>
+
+                    {isLoading &&
+                        <CircularProgress color="success" />
+                    }
+                    {user?.email &&
+                        <Alert severity="success">User Login successful</Alert>
+                    }
+                    {
+                        authError &&
+                        <Alert severity="error">{authError}</Alert>
+                    }
+
                     <NavLink
                         to='/register'
                         style={{ textDecoration: 'none' }}>
