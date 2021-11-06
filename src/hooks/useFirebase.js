@@ -1,5 +1,5 @@
 import initializeAuthentication from "../Pages/Login/Firebase/firebase.init";
-import { getAuth, createUserWithEmailAndPassword, signOut, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signOut, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, updateProfile } from "firebase/auth";
 import { useEffect, useState } from "react";
 
 initializeAuthentication();
@@ -10,12 +10,39 @@ const useFirebase = () => {
     const [isLoading, setIsLoading] = useState(true);
     const auth = getAuth();
 
+    // google sing in 
+    const singInUsingGoogle = (location, history) => {
+        setIsLoading(true);
+        const googleProvider = new GoogleAuthProvider();
+        signInWithPopup(auth, googleProvider)
+            .then((result) => {
+                const destination = location?.state?.from || '/';
+                history.replace(destination)
+                setAuthError('');
+            }).catch((error) => {
+                setAuthError(error.message);
+            })
+            .finally(() => setIsLoading(false));
+    }
+
     // user register
-    const userRegister = (email, password) => {
+    const userRegister = (email, password, name, history) => {
         setIsLoading(true);
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 setAuthError('');
+
+                const newUser = { email, displayName: name }
+                setUser(newUser)
+
+                // update userName
+                updateProfile(auth.currentUser, {
+                    displayName: name
+                }).then(() => {
+                }).catch((error) => {
+                });
+
+                history.replace('/');
             })
             .catch((error) => {
                 setAuthError(error.message);
@@ -70,7 +97,8 @@ const useFirebase = () => {
         setUser,
         logOut,
         isLoading,
-        authError
+        authError,
+        singInUsingGoogle
     }
 };
 

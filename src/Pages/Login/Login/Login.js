@@ -9,7 +9,7 @@ import LogImg from '../../../images/login.png'
 const Login = () => {
 
     const [loginData, setLoginData] = useState({});
-    const { user, loginWithEmailPass, isLoading, authError } = useAuth();
+    const { user, loginWithEmailPass, isLoading, authError, singInUsingGoogle } = useAuth();
 
     const location = useLocation();
     const history = useHistory();
@@ -27,6 +27,10 @@ const Login = () => {
         loginWithEmailPass(loginData.email, loginData.password, location, history)
         e.preventDefault();
     }
+    // google singIn
+    const handleGoogleSingIn = () => {
+        singInUsingGoogle(location, history)
+    }
     return (
         <Container>
             <Grid container spacing={2}>
@@ -39,7 +43,7 @@ const Login = () => {
                         <TextField
                             type="email"
                             name="email"
-                            onChange={handleOnChange}
+                            onBlur={handleOnChange}
                             label="Email"
                             variant="standard"
                             sx={{ my: 1, width: '75%' }}
@@ -48,7 +52,7 @@ const Login = () => {
                         <TextField
                             type="password"
                             name="password"
-                            onChange={handleOnChange}
+                            onBlur={handleOnChange}
                             label="Password"
                             variant="standard"
                             sx={{ my: 1, width: '75%' }}
@@ -60,24 +64,28 @@ const Login = () => {
                             type="submit">
                             Login
                         </Button>
+                        <br />
+                        <NavLink
+                            to='/register'
+                            style={{ textDecoration: 'none' }}>
+                            New User? Go To Register
+                        </NavLink>
+                        <br />
+                        {isLoading &&
+                            <CircularProgress color="success" />
+                        }
+                        {user?.email &&
+                            <Alert severity="success">User Login successful</Alert>
+                        }
+                        {
+                            authError &&
+                            <Alert severity="error">{authError}</Alert>
+                        }
+
                     </form>
 
-                    {isLoading &&
-                        <CircularProgress color="success" />
-                    }
-                    {user?.email &&
-                        <Alert severity="success">User Login successful</Alert>
-                    }
-                    {
-                        authError &&
-                        <Alert severity="error">{authError}</Alert>
-                    }
-
-                    <NavLink
-                        to='/register'
-                        style={{ textDecoration: 'none' }}>
-                        New User? Go To Register
-                    </NavLink>
+                    <p>-------------------</p>
+                    <Button onClick={handleGoogleSingIn} variant='contained'>Google Sing In</Button>
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <img style={{ width: '100%' }} src={LogImg} alt="" />

@@ -6,6 +6,7 @@ import Fade from '@mui/material/Fade';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { TextField } from '@mui/material';
+import useAuth from '../../../hooks/useAuth';
 
 const style = {
     position: 'absolute',
@@ -20,7 +21,9 @@ const style = {
 };
 
 const BookingModal = ({ open, handleClose, booking, date, time }) => {
+    console.log(time);
     const { name } = booking;
+    const { user } = useAuth();
 
     const handleSubmit = e => {
         alert('submiting')
@@ -48,10 +51,10 @@ const BookingModal = ({ open, handleClose, booking, date, time }) => {
                             {name}
                         </Typography>
                         <form onSubmit={handleSubmit}>
-                            <TextField type="time" defaultValue={time} fullWidth disabled id="fullWidth" sx={{ my: 1 }} />
-                            <TextField type="text" placeholder='Your Name' fullWidth id="fullWidth" sx={{ my: 1 }} />
-                            <TextField type="email" placeholder='Your Email' fullWidth id="fullWidth" sx={{ my: 1 }} />
-                            <TextField type="number" placeholder='Your Number' fullWidth id="fullWidth" sx={{ my: 1 }} />
+                            <TextField type="text" defaultValue={time} fullWidth disabled id="fullWidth" sx={{ my: 1 }} />
+                            <TextField type="text" defaultValue={user?.displayName} fullWidth id="fullWidth" sx={{ my: 1 }} />
+                            <TextField type="email" defaultValue={user?.email} fullWidth id="fullWidth" sx={{ my: 1 }} />
+                            <TextField defaultValue='Phone Number' fullWidth id="fullWidth" sx={{ my: 1 }} />
                             <TextField defaultValue={date.toDateString()} fullWidth disabled id="fullWidth" sx={{ my: 1 }} />
 
                             <Button type="submit" variant="contained" color="success">
