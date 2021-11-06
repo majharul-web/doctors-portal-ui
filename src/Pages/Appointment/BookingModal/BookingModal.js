@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { TextField } from '@mui/material';
 import useAuth from '../../../hooks/useAuth';
+import axios from 'axios';
 
 const style = {
     position: 'absolute',
@@ -20,15 +21,44 @@ const style = {
     p: 4,
 };
 
-const BookingModal = ({ open, handleClose, booking, date, time }) => {
-    console.log(time);
+const BookingModal = ({ open, handleClose, booking, date, time, setBooking }) => {
     const { name } = booking;
     const { user } = useAuth();
 
+    const prevInfo = { patientName: user.displayName, email: user.email, phone: '' };
+    const [bookingInfo, setBookingInfo] = useState(prevInfo)
+
     const handleSubmit = e => {
-        alert('submiting')
-        handleClose()
+        // collect data.
+        const appointMentData = {
+            ...bookingInfo,
+            time,
+            serviceName: name,
+            date: date.toDateString()
+        }
+
+        axios.post('http://localhost:5000/appointments', appointMentData)
+            .then(res => {
+                const success = res.data.insertedId;
+                if (success) {
+                    setBooking(true)
+                    handleClose()
+                }
+
+            })
+
+
+
         e.preventDefault()
+    }
+
+    const handleOnBlur = e => {
+        const field = e.target.name;
+        const value = e.target.value;
+        const newInfo = { ...bookingInfo };
+        newInfo[field] = value;
+        setBookingInfo(newInfo)
+
     }
 
     return (
@@ -51,11 +81,25 @@ const BookingModal = ({ open, handleClose, booking, date, time }) => {
                             {name}
                         </Typography>
                         <form onSubmit={handleSubmit}>
-                            <TextField type="text" defaultValue={time} fullWidth disabled id="fullWidth" sx={{ my: 1 }} />
-                            <TextField type="text" defaultValue={user?.displayName} fullWidth id="fullWidth" sx={{ my: 1 }} />
-                            <TextField type="email" defaultValue={user?.email} fullWidth id="fullWidth" sx={{ my: 1 }} />
-                            <TextField defaultValue='Phone Number' fullWidth id="fullWidth" sx={{ my: 1 }} />
-                            <TextField defaultValue={date.toDateString()} fullWidth disabled id="fullWidth" sx={{ my: 1 }} />
+                            <TextField type="text"
+                                onBlur={handleOnBlur}
+                                defaultValue={time} fullWidth disabled id="fullWidth" sx={{ my: 1 }} />
+
+                            <TextField type="text"
+                                name="patientName"
+                                onBlur={handleOnBlur}
+                                defaultValue={user?.displayName} fullWidth id="fullWidth" sx={{ my: 1 }} />
+                            <TextField type="email"
+                                name="email"
+                                onBlur={handleOnBlur}
+                                defaultValue={user?.email} fullWidth id="fullWidth" sx={{ my: 1 }} />
+                            <TextField defaultValue='Phone Number'
+                                name="phone"
+                                onBlur={handleOnBlur}
+                                fullWidth id="fullWidth" sx={{ my: 1 }} />
+                            <TextField
+                                onBlur={handleOnBlur}
+                                defaultValue={date.toDateString()} fullWidth disabled id="fullWidth" sx={{ my: 1 }} />
 
                             <Button type="submit" variant="contained" color="success">
                                 Submit
