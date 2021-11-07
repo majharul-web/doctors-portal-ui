@@ -34,7 +34,7 @@ const BookingModal = ({ open, handleClose, booking, date, time, setBooking }) =>
             ...bookingInfo,
             time,
             serviceName: name,
-            date: date.toDateString()
+            date: date.toLocaleDateString()
         }
 
         axios.post('http://localhost:5000/appointments', appointMentData)
