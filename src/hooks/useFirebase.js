@@ -1,6 +1,7 @@
 import initializeAuthentication from "../Pages/Login/Firebase/firebase.init";
 import { getAuth, createUserWithEmailAndPassword, signOut, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, updateProfile } from "firebase/auth";
 import { useEffect, useState } from "react";
+import setDate from "date-fns/setDate";
 
 initializeAuthentication();
 
@@ -8,6 +9,10 @@ const useFirebase = () => {
     const [user, setUser] = useState({});
     const [authError, setAuthError] = useState('');
     const [isLoading, setIsLoading] = useState(true);
+    const [admin, setAdmin] = useState(false);
+
+
+
     const auth = getAuth();
 
     // google sing in 
@@ -85,6 +90,13 @@ const useFirebase = () => {
         return () => unsubscribe;
     }, [])
 
+    // get admin
+    useEffect(() => {
+        fetch(`http://localhost:5000/users/${user.email}`)
+            .then(res => res.json())
+            .then(data => setAdmin(data.admin))
+    }, [user.email])
+
     // logOut
     const logOut = () => {
         setIsLoading(true)
@@ -120,7 +132,8 @@ const useFirebase = () => {
         logOut,
         isLoading,
         authError,
-        singInUsingGoogle
+        singInUsingGoogle,
+        admin
     }
 };
 
