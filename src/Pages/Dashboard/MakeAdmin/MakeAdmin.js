@@ -13,7 +13,7 @@ const MakeAdmin = () => {
     }
     const handleAdminAdd = e => {
         const user = { email }
-        fetch('http://localhost:5000/users/admin', {
+        fetch('https://mighty-lowlands-10966.herokuapp.com/users/admin', {
             method: "PUT",
             headers: {
                 'authorization': `Bearer ${idToken}`,

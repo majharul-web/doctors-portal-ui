@@ -37,7 +37,7 @@ const BookingModal = ({ open, handleClose, booking, date, time, setBooking }) =>
             date: date.toLocaleDateString()
         }
 
-        axios.post('http://localhost:5000/appointments', appointMentData)
+        axios.post('https://mighty-lowlands-10966.herokuapp.com/appointments', appointMentData)
             .then(res => {
                 const success = res.data.insertedId;
                 if (success) {
