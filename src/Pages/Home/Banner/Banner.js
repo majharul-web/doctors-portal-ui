@@ -1,7 +1,7 @@
 import React from 'react';
 import chair from '../../../images/chair.png';
 import bg from '../../../images/bg.png';
-import { Box, textAlign } from '@mui/system';
+import { Box } from '@mui/system';
 import { Button, Container, Grid, Typography } from '@mui/material';
 
 const Banner = () => {

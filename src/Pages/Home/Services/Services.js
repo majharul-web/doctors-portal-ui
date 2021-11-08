@@ -12,17 +12,20 @@ const services = [
     {
         name: 'Fluoride Treatment',
         description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed culpa cumque enim! Voluptatibus aliquid expedita saepe accusantium itaque ducimus rem voluptas',
-        img: fluoride
+        img: fluoride,
+        id: 1
     },
     {
         name: 'Cavity Filling',
         description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed culpa cumque enim! Voluptatibus aliquid expedita saepe accusantium itaque ducimus rem voluptas',
-        img: cavity
+        img: cavity,
+        id: 2
     },
     {
         name: 'Teeth Whitening',
         description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed culpa cumque enim! Voluptatibus aliquid expedita saepe accusantium itaque ducimus rem voluptas',
-        img: whitening
+        img: whitening,
+        id: 3
     }
 ]
 
@@ -38,7 +41,7 @@ const Services = () => {
             </Typography>
             <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-                    {services.map(service => <Service key='service.name' service={service}></Service>)}
+                    {services.map(service => <Service key='service.id' service={service}></Service>)}
                 </Grid>
             </Box>
         </Container>

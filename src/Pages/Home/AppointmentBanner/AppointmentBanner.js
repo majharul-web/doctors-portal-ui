@@ -1,5 +1,5 @@
 import { Button, Grid, Typography } from '@mui/material';
-import { Box, height } from '@mui/system';
+import { Box } from '@mui/system';
 import React from 'react';
 import doctor from '../../../images/doctor.png';
 import bg from '../../../images/appointment-bg.png';

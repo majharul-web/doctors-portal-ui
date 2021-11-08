@@ -11,7 +11,7 @@ import { Button } from '@mui/material';
 
 const Appointments = ({ date }) => {
 
-    const { user } = useAuth();
+    const { user, idToken } = useAuth();
 
     const [appointments, setAppointments] = useState([]);
 
@@ -19,7 +19,11 @@ const Appointments = ({ date }) => {
         const dateString = date.toLocaleDateString();
         const url = `http://localhost:5000/appointments?email=${user?.email}&date=${dateString}`;
 
-        fetch(url)
+        fetch(url, {
+            headers: {
+                'authorization': `Bearer ${idToken}`
+            }
+        })
             .then(res => res.json())
             .then(data => setAppointments(data));
     }, [date]);

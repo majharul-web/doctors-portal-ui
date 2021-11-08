@@ -11,7 +11,6 @@ import useAuth from '../../../hooks/useAuth';
 
 const Navigation = () => {
     const { user, logOut } = useAuth();
-    console.log(user);
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">

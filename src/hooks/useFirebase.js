@@ -1,7 +1,6 @@
 import initializeAuthentication from "../Pages/Login/Firebase/firebase.init";
-import { getAuth, createUserWithEmailAndPassword, signOut, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, updateProfile } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signOut, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, updateProfile, getIdToken } from "firebase/auth";
 import { useEffect, useState } from "react";
-import setDate from "date-fns/setDate";
 
 initializeAuthentication();
 
@@ -10,6 +9,7 @@ const useFirebase = () => {
     const [authError, setAuthError] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [admin, setAdmin] = useState(false);
+    const [idToken, setIdToken] = useState('');
 
 
 
@@ -82,6 +82,10 @@ const useFirebase = () => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
                 setUser(user)
+                getIdToken(user)
+                    .then(idToken => {
+                        setIdToken(idToken);
+                    })
             } else {
                 setUser({})
             }
@@ -133,7 +137,8 @@ const useFirebase = () => {
         isLoading,
         authError,
         singInUsingGoogle,
-        admin
+        admin,
+        idToken
     }
 };
 
