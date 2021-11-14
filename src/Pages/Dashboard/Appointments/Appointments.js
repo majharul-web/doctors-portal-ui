@@ -8,6 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Button } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 const Appointments = ({ date }) => {
 
@@ -38,7 +39,6 @@ const Appointments = ({ date }) => {
                             <TableCell>Name</TableCell>
                             <TableCell align="right">Time</TableCell>
                             <TableCell align="right">Action</TableCell>
-
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -52,7 +52,11 @@ const Appointments = ({ date }) => {
                                 </TableCell>
                                 <TableCell align="right">{row.time}</TableCell>
                                 <TableCell align="right">
-                                    <Button variant='contained'>Delete</Button>
+                                    {row.payment ? 'Paid' :
+                                        <Link to={`/dashboard/payment/${row._id}`}>
+                                            <Button variant='contained'>Pay</Button>
+                                        </Link>
+                                    }
                                 </TableCell>
 
                             </TableRow>
