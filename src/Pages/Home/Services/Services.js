@@ -33,10 +33,10 @@ const Services = () => {
 
     return (
         <Container>
-            <Typography sx={{ fontWeight: 500, color: 'info.main', m: 2 }} variant='h6' component='div'>
+            <Typography sx={{ fontWeight: 500, color: 'info.main', mt: '5em', textAlign: 'center' }} variant='h6' component='div'>
                 Our Services
             </Typography>
-            <Typography sx={{ fontWeight: 600, m: 5 }} variant='h4' component='div'>
+            <Typography sx={{ fontWeight: 600, my: 5, textAlign: 'center' }} variant='h4' component='div'>
                 Services We Provide
             </Typography>
             <Box sx={{ flexGrow: 1 }}>

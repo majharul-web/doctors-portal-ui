@@ -16,7 +16,7 @@ import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 
-const Navigation = () => {
+const Navbar = () => {
     const { user, logOut } = useAuth();
     const theme = useTheme();
 
@@ -116,12 +116,8 @@ const Navigation = () => {
                         >
                             <MenuIcon />
                         </IconButton>
-
                         <Typography className={navLogo} variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            <Link className={navItem} to='/'>
-                                Doctor Portal
-                            </Link>
-
+                            Doctor Portal
                         </Typography>
 
                         <Box className={navItemContainer}>
@@ -152,6 +148,7 @@ const Navigation = () => {
             </Box>
 
             <div>
+
                 <React.Fragment >
                     <Drawer
 
@@ -161,9 +158,10 @@ const Navigation = () => {
                         {list}
                     </Drawer>
                 </React.Fragment>
+
             </div>
         </>
     );
 };
 
-export default Navigation;
+export default Navbar;
