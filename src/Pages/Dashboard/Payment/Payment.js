@@ -22,10 +22,12 @@ const Payment = () => {
             <h3>Please Pay Your Bill For :{appointment.patientName} </h3>
             <p>Price: ${appointment.price}</p>
 
-            <Elements stripe={stripePromise}>
-                <CheckoutForm appointment={appointment}>
-                </CheckoutForm>
-            </Elements>
+            {appointment.price &&
+                <Elements stripe={stripePromise}>
+                    <CheckoutForm appointment={appointment}>
+                    </CheckoutForm>
+                </Elements>
+            }
         </div>
     );
 };

@@ -1,12 +1,28 @@
-import { Alert } from '@mui/material';
+import { Alert, CircularProgress } from '@mui/material';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const CheckoutForm = ({ appointment }) => {
-    const { price } = appointment;
+    const { price, patientName, email, _id } = appointment;
     const stripe = useStripe();
     const elements = useElements();
+
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
+    const [processing, setProcessing] = useState(false);
+    const [clientSecret, setClientSecret] = useState('');
+
+    useEffect(() => {
+        fetch('http://localhost:5000/create-payment-intent', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({ price })
+        })
+            .then(res => res.json())
+            .then(data => setClientSecret(data.clientSecret))
+    }, [price])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -20,6 +36,8 @@ const CheckoutForm = ({ appointment }) => {
             return;
         }
 
+        setProcessing(true)
+
         // Use your card Element with other Stripe.js APIs
         const { error, paymentMethod } = await stripe.createPaymentMethod({
             type: 'card',
@@ -27,11 +45,56 @@ const CheckoutForm = ({ appointment }) => {
         });
 
         if (error) {
-            console.log('[error]', error);
+            setSuccess('');
             setError(error.message);
+            setProcessing(false)
+
         } else {
             setError('')
-            console.log('[PaymentMethod]', paymentMethod);
+            console.log(paymentMethod);
+
+        }
+
+        // intent
+        const { paymentIntent, error: intentError } = await stripe.confirmCardPayment(
+            clientSecret,
+            {
+                payment_method: {
+                    card: card,
+                    billing_details: {
+                        name: patientName,
+                        email: email
+                    },
+                },
+            },
+        );
+
+        if (intentError) {
+            setSuccess('');
+            setError(intentError.message)
+        }
+        else {
+            setError('')
+            setSuccess('Your Payment Process success');
+            console.log(paymentIntent);
+            setProcessing(false);
+
+            const payment = {
+                time: paymentIntent.created,
+                transaction: paymentIntent.client_secret.slice('_secret')[0],
+                amount: paymentIntent.amount
+            }
+            // save to database
+            const url = `http://localhost:5000/appointments/${_id}`;
+            fetch(url, {
+                method: 'PUT',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify(payment)
+            })
+                .then(res => res.json())
+                .then(data => console.log(data))
         }
     }
     return (
@@ -53,14 +116,18 @@ const CheckoutForm = ({ appointment }) => {
                         },
                     }}
                 />
-                <button type="submit" disabled={!stripe}>
+                {processing ? <CircularProgress></CircularProgress> : <button type="submit" disabled={!stripe || success}>
                     Pay ${price}
-                </button>
+                </button>}
 
             </form>
             {
                 error &&
                 <Alert severity="error">{error}</Alert>
+            }
+            {
+                success &&
+                <Alert severity="success">{success}</Alert>
             }
         </div>
     );
