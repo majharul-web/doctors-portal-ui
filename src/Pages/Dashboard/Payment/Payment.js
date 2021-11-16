@@ -13,7 +13,7 @@ const Payment = () => {
     const [appointment, setAppointment] = useState([]);
 
     useEffect(() => {
-        fetch(`http://localhost:5000/appointment/${appointmentId}`)
+        fetch(`https://mighty-lowlands-10966.herokuapp.com/appointment/${appointmentId}`)
             .then(res => res.json())
             .then(data => setAppointment(data))
     }, [])
