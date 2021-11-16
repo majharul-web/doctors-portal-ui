@@ -11,19 +11,13 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
 import {
-    Switch,
-    Route,
+    Outlet,
     Link,
-    useRouteMatch
+
 } from "react-router-dom";
 
 import { Button } from '@mui/material';
-import AppointmentHome from '../AppointmentHome/AppointmentHome';
-import MakeAdmin from '../MakeAdmin/MakeAdmin';
-import AddDoctor from '../AddDoctor/AddDoctor';
 import useAuth from '../../../hooks/useAuth';
-import AdminRoute from '../../Login/AdminRoute/AdminRoute';
-import Payment from '../Payment/Payment';
 
 
 const drawerWidth = 200;
@@ -32,7 +26,6 @@ function Dashboard(props) {
     const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
-    let { path, url } = useRouteMatch();
     const { admin } = useAuth();
 
 
@@ -46,25 +39,14 @@ function Dashboard(props) {
             <Divider />
 
             <Link to='/appointment'> <Button >Appointment</Button> </Link> <br />
-            <Link to={`${url}`}> <Button >Dashboard</Button> </Link> <br />
+            <Link to={`/dashboard`}> <Button >Dashboard</Button> </Link> <br />
             {admin &&
                 <Box>
-                    <Link to={`${url}/makeAdmin`}> <Button >MakeAdmin</Button> </Link> <br />
-                    <Link to={`${url}/addDoctor`}> <Button >Add Doctor</Button> </Link> <br />
+                    <Link to={`/dashboard/makeAdmin`}> <Button >MakeAdmin</Button> </Link> <br />
+                    <Link to={`/dashboard/addDoctor`}> <Button >Add Doctor</Button> </Link> <br />
                 </Box>
             }
 
-            {/* 
-            <List>
-                {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                    <ListItem button key={text}>
-                        <ListItemIcon>
-                            {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                        </ListItemIcon>
-                        <ListItemText primary={text} />
-                    </ListItem>
-                ))}
-            </List> */}
 
         </div>
     );
@@ -134,20 +116,7 @@ function Dashboard(props) {
             >
                 <Toolbar />
 
-                <Switch>
-                    <Route exact path={path}>
-                        <AppointmentHome></AppointmentHome>
-                    </Route>
-                    <Route path={`${path}/payment/:appointmentId`}>
-                        <Payment></Payment>
-                    </Route>
-                    <AdminRoute path={`${path}/makeAdmin`}>
-                        <MakeAdmin></MakeAdmin>
-                    </AdminRoute>
-                    <AdminRoute path={`${path}/addDoctor`}>
-                        <AddDoctor></AddDoctor>
-                    </AdminRoute>
-                </Switch>
+                <Outlet />
 
             </Box>
         </Box >
